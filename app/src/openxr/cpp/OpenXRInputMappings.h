@@ -71,7 +71,10 @@ namespace crow {
     static_assert(OpenXRAxisTypeNames->size() == static_cast<int>(OpenXRAxisType::enum_count), "sizes don't match");
 
     // Mapping Classes
-    using OpenXRInputProfile = const char* const;
+    // WOLVIC-LOCAL: 元素类型不能带顶层 const —— std::vector<const char* const>
+    // 在新版 libc++（NDK 30）里会让 std::allocator 静态断言失败
+    // （"std::allocator does not support const types"），编译直接报错。
+    using OpenXRInputProfile = const char*;
     using OpenXRButtonPath = const char* const;
 
     enum OpenXRButtonFlags {

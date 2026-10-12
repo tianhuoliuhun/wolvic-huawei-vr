@@ -180,6 +180,13 @@ target_sources(native-lib PUBLIC
 include_directories(
     ${CMAKE_SOURCE_DIR}/../app/src/main/cpp/tinygltf)
 
+# WOLVIC-LOCAL: json.hpp bundled with tinygltf declares `operator "" _json`, which
+# newer clang (NDK 30) rejects under the project-wide -Werror. Scope the exception
+# to this single translation unit only.
+set_source_files_properties(
+    ${CMAKE_SOURCE_DIR}/../app/src/main/cpp/tinygltf/tiny_gltf.cc
+    PROPERTIES COMPILE_OPTIONS "-Wno-deprecated-literal-operator")
+
 # Add dependency on KTX-Software
 add_subdirectory(${CMAKE_SOURCE_DIR}/src/main/cpp/KTX-Software)
 target_link_libraries(native-lib PRIVATE ktx_read)

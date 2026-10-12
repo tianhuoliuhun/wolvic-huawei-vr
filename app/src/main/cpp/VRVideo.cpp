@@ -243,7 +243,7 @@ struct VRVideo::State {
     // Combine yaw (-90 degrees to center the 180 view) and pitch adjustment
     vrb::Matrix yawRotation = vrb::Matrix::Rotation(vrb::Vector(0.0f, 1.0f, 0.0f), -(float)M_PI * 0.5f);
     vrb::Matrix pitchRotation = vrb::Matrix::Rotation(vrb::Vector(1.0f, 0.0f, 0.0f), mPitch * (float)M_PI / 180.0f);
-    vrb::Matrix combinedRotation = pitchRotation * yawRotation;
+    vrb::Matrix combinedRotation = pitchRotation.PostMultiply(yawRotation);
     vrb::TransformPtr transform = vrb::Transform::Create(create);
     transform->AddNode(VRLayerNode::Create(create, aLayer));
     transform->SetTransform(combinedRotation);
@@ -406,7 +406,7 @@ VRVideo::SetPitch(float aPitch) {
     if (m.leftEye) {
       vrb::Matrix yawRotation = vrb::Matrix::Rotation(vrb::Vector(0.0f, 1.0f, 0.0f), -(float)M_PI * 0.5f);
       vrb::Matrix pitchRotation = vrb::Matrix::Rotation(vrb::Vector(1.0f, 0.0f, 0.0f), m.mPitch * (float)M_PI / 180.0f);
-      vrb::Matrix combinedRotation = pitchRotation * yawRotation;
+      vrb::Matrix combinedRotation = pitchRotation.PostMultiply(yawRotation);
       // Find the Transform node inside the Toggle and update it
       for (int i = 0; i < m.leftEye->GetNodeCount(); i++) {
         vrb::NodePtr node = m.leftEye->GetNode(i);
@@ -419,7 +419,7 @@ VRVideo::SetPitch(float aPitch) {
     if (m.rightEye) {
       vrb::Matrix yawRotation = vrb::Matrix::Rotation(vrb::Vector(0.0f, 1.0f, 0.0f), -(float)M_PI * 0.5f);
       vrb::Matrix pitchRotation = vrb::Matrix::Rotation(vrb::Vector(1.0f, 0.0f, 0.0f), m.mPitch * (float)M_PI / 180.0f);
-      vrb::Matrix combinedRotation = pitchRotation * yawRotation;
+      vrb::Matrix combinedRotation = pitchRotation.PostMultiply(yawRotation);
       for (int i = 0; i < m.rightEye->GetNodeCount(); i++) {
         vrb::NodePtr node = m.rightEye->GetNode(i);
         vrb::TransformPtr transform = std::dynamic_pointer_cast<vrb::Transform>(node);

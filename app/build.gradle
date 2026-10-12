@@ -107,6 +107,8 @@ def CHROMIUM_RELEASE_VERSION_NAME = '1.2.3'
 android {
     namespace 'com.igalia.wolvic'
     compileSdkVersion 35
+    // 本机只有 NDK 30 完整安装（SDK 里的 27.0.12077973 是空壳目录，缺 source.properties）
+    ndkVersion "30.0.16248370"
     defaultConfig {
         applicationId "com.igalia.wolvic"
         minSdkVersion 24
